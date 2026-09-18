@@ -1,0 +1,120 @@
+.catalog-hero {
+  padding: 140px var(--gutter) 60px;
+  text-align: center;
+  background: var(--black);
+}
+
+.catalog-hero__eyebrow {
+  margin-bottom: 16px;
+}
+
+.catalog-hero__title {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.catalog-filters {
+  padding: 0 var(--gutter) 40px;
+  background: var(--black);
+  border-bottom: 1px solid var(--line);
+}
+
+.catalog-filters__inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.catalog-filters__group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.catalog-filters__btn {
+  font-family: var(--f-body);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--grey);
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  background: var(--black-2);
+  transition: all 0.3s var(--ease-out);
+}
+
+.catalog-filters__btn:hover {
+  border-color: var(--line-strong);
+  color: var(--off-white);
+}
+
+.catalog-filters__btn.is-active {
+  border-color: var(--accent-bright);
+  background: var(--black);
+  color: var(--off-white);
+}
+
+.catalog-filters__sort {
+  width: auto;
+  min-width: 220px;
+  padding: 10px 40px 10px 16px;
+  font-family: var(--f-body);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--off-white);
+  background: var(--black-2);
+  border: 1px solid var(--line);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23d8d8d8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  cursor: pointer;
+}
+
+.catalog-filters__sort:hover {
+  border-color: var(--line-strong);
+}
+
+.catalog-filters__sort:focus {
+  border-color: var(--accent-bright);
+}
+
+@media (max-width: 760px) {
+  .catalog-hero {
+    padding: 100px var(--gutter) 40px;
+  }
+
+  .catalog-filters {
+    padding: 0 var(--gutter) 32px;
+  }
+
+  .catalog-filters__inner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .catalog-filters__group {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .catalog-filters__btn {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+
+  .catalog-filters__sort {
+    width: 100%;
+    min-width: auto;
+  }
+}

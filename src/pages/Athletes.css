@@ -1,0 +1,175 @@
+.athletes-hero {
+  padding: 140px var(--gutter) 60px;
+  text-align: center;
+  background: var(--black);
+  position: relative;
+}
+
+.athletes-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(216,216,216,0.03) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.athletes-hero__eyebrow {
+  margin-bottom: 16px;
+}
+
+.athletes-hero__title {
+  max-width: 800px;
+  margin: 0 auto 24px;
+}
+
+.athletes-hero__text {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.athletes-grid {
+  padding: min(9vw, 100px) var(--gutter);
+  background: var(--black);
+}
+
+.athletes-grid__list {
+  max-width: var(--container);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.athletes-grid__card {
+  background: var(--black-2);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  transition: all 0.3s var(--ease-out);
+}
+
+.athletes-grid__card:hover {
+  border-color: var(--line-strong);
+  background: var(--black-3);
+}
+
+.athletes-grid__image-wrapper {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+
+.athletes-grid__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease-out);
+}
+
+.athletes-grid__card:hover .athletes-grid__image {
+  transform: scale(1.08);
+}
+
+.athletes-grid__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(10,10,10,0.6) 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out);
+}
+
+.athletes-grid__card:hover .athletes-grid__overlay {
+  opacity: 1;
+}
+
+.athletes-grid__zoom {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: rgba(18, 18, 18, 0.8);
+  backdrop-filter: blur(8px);
+  color: var(--off-white);
+  transform: translateY(12px);
+  transition: all 0.3s var(--ease-out);
+}
+
+.athletes-grid__card:hover .athletes-grid__zoom {
+  transform: translateY(0);
+}
+
+.athletes-grid__zoom:hover {
+  background: var(--off-white);
+  border-color: var(--off-white);
+  color: var(--black);
+}
+
+.athletes-grid__info {
+  padding: 28px;
+}
+
+.athletes-grid__sport {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-bright);
+  margin-bottom: 8px;
+}
+
+.athletes-grid__name {
+  font-family: var(--f-display);
+  font-size: clamp(22px, 3.2vw, 28px);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--off-white);
+  margin-bottom: 4px;
+}
+
+.athletes-grid__location {
+  font-family: var(--f-body);
+  font-size: 13px;
+  color: var(--grey-dim);
+  margin-bottom: 16px;
+}
+
+.athletes-grid__bio {
+  font-family: var(--f-body);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--grey);
+}
+
+@media (max-width: 1024px) {
+  .athletes-grid__list {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+  }
+}
+
+@media (max-width: 760px) {
+  .athletes-hero {
+    padding: 100px var(--gutter) 40px;
+  }
+
+  .athletes-grid {
+    padding: 80px var(--gutter);
+  }
+
+  .athletes-grid__list {
+    gap: 16px;
+  }
+
+  .athletes-grid__info {
+    padding: 24px;
+  }
+}

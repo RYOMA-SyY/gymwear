@@ -1,0 +1,103 @@
+.statement {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+}
+
+.statement__image-wrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.statement__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.statement--full .statement__content {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: min(12vw, 140px) var(--gutter);
+  background: 
+    radial-gradient(ellipse 60% 40% at 50% 50%, rgba(216,216,216,0.03) 0%, transparent 70%),
+    var(--black);
+}
+
+.statement--full .statement__image-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse 80% 60% at 50% 100%, transparent 0%, rgba(10,10,10,0.8) 70%, var(--black) 100%),
+    linear-gradient(180deg, rgba(10,10,10,0.3) 0%, transparent 50%, rgba(10,10,10,0.5) 100%);
+}
+
+.statement__content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  padding: min(10vw, 120px) var(--gutter);
+}
+
+.statement__eyebrow {
+  margin-bottom: 16px;
+}
+
+.statement__title {
+  font-family: var(--f-display);
+  font-size: clamp(32px, 6.4vw, 76px);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--off-white);
+  margin-bottom: 24px;
+}
+
+.statement__text {
+  font-family: var(--f-body);
+  font-size: clamp(16px, 2.2vw, 20px);
+  line-height: 1.7;
+  color: var(--grey);
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.statement--text-only {
+  background: var(--black);
+}
+
+.statement--text-only::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80vw;
+  height: 80vw;
+  max-width: 800px;
+  max-height: 800px;
+  background: radial-gradient(circle, rgba(216,216,216,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+@media (max-width: 760px) {
+  .statement__content {
+    padding: 80px var(--gutter);
+  }
+
+  .statement--full .statement__content {
+    min-height: auto;
+    padding: 100px var(--gutter);
+  }
+}
