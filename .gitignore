@@ -17,8 +17,9 @@ dist-ssr
 .env.*
 !.env.example
 
-# Local skill/reference drops — not part of the site
-~/
+# Local skill/reference drops at repo root — not part of the site
+# (anchored: ignores only the top-level "~" folder, nothing nested)
+/~/
 
 # Editor directories and files
 .vscode/*
