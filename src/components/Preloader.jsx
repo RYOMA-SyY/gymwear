@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
 
 const DURATION = 2000;
 const EASE_OUT = [0.22, 1, 0.36, 1];
@@ -16,12 +16,7 @@ export const loaderDebug = {
   reducedMotion: false,
 };
 
-export const loaderDebugControls = {
-  skip: null,
-  forceMotion:
-    typeof localStorage !== 'undefined' &&
-    localStorage.getItem('gymwear-force-motion') === '1',
-};
+export const loaderDebugControls = { skip: null };
 
 const wordContainer = {
   hidden: {},
@@ -39,9 +34,6 @@ export default function Preloader({ onComplete }) {
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
 
-  const osReducedMotion = useReducedMotion();
-  const reduced = osReducedMotion && !loaderDebugControls.forceMotion;
-
   useEffect(() => {
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -51,7 +43,9 @@ export default function Preloader({ onComplete }) {
     loaderDebug.progress = 0;
     loaderDebug.elapsed = 0;
     loaderDebug.ticks = 0;
-    loaderDebug.reducedMotion = reduced;
+    loaderDebug.reducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
 
     let raf = 0;
     let lastShown = -1;
@@ -69,15 +63,6 @@ export default function Preloader({ onComplete }) {
     };
 
     loaderDebugControls.skip = finish;
-
-    if (reduced) {
-      const t = setTimeout(finish, 150);
-      return () => {
-        clearTimeout(t);
-        document.body.style.overflow = prevOverflow;
-        loaderDebugControls.skip = null;
-      };
-    }
 
     const tick = () => {
       const elapsed = performance.now() - start;
@@ -114,7 +99,7 @@ export default function Preloader({ onComplete }) {
     <motion.div
       className="preloader"
       aria-hidden="true"
-      initial={reduced ? false : { opacity: 1 }}
+      initial={{ opacity: 1 }}
       exit={{ y: '-100%', transition: { duration: 0.7, ease: EASE_IN_OUT } }}
     >
       <div className="preloader__center">
@@ -124,7 +109,7 @@ export default function Preloader({ onComplete }) {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           aria-hidden="true"
-          initial={reduced ? false : { opacity: 0, scale: 0.92 }}
+          initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: EASE_OUT }}
         >
@@ -147,7 +132,7 @@ export default function Preloader({ onComplete }) {
           className="preloader__word"
           aria-hidden="true"
           variants={wordContainer}
-          initial={reduced ? false : 'hidden'}
+          initial="hidden"
           animate="show"
         >
           {'GYMWEAR'.split('').map((ch, i) => (
@@ -159,7 +144,7 @@ export default function Preloader({ onComplete }) {
 
         <motion.div
           className="preloader__meta"
-          initial={reduced ? false : { opacity: 0 }}
+          initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.3 }}
         >
