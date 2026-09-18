@@ -37,7 +37,7 @@
 .nav__logo-img {
   display: block;
   flex-shrink: 0;
-  height: 48px;
+  height: 144px;
   width: auto;
   filter: invert(1);
 }
@@ -405,13 +405,13 @@
   }
 
   .nav__mobile-inner {
-    padding: calc(96px + env(safe-area-inset-top)) 24px calc(48px + env(safe-area-inset-bottom));
+    padding: calc(176px + env(safe-area-inset-top)) 24px calc(48px + env(safe-area-inset-bottom));
   }
 }
 
 @media (max-width: 380px) {
   .nav__logo-img {
-    height: 40px;
+    height: 120px;
   }
 
   .nav__inner {

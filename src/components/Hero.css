@@ -47,7 +47,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: calc(96px + env(safe-area-inset-top)) max(var(--gutter), env(safe-area-inset-right)) 96px max(var(--gutter), env(safe-area-inset-left));
+  padding: calc(200px + env(safe-area-inset-top)) max(var(--gutter), env(safe-area-inset-right)) 120px max(var(--gutter), env(safe-area-inset-left));
   text-align: center;
 }
 
@@ -168,7 +168,7 @@
   }
 
   .hero__content {
-    padding: calc(84px + env(safe-area-inset-top)) 20px calc(72px + env(safe-area-inset-bottom));
+    padding: calc(176px + env(safe-area-inset-top)) 20px calc(72px + env(safe-area-inset-bottom));
   }
 
   .hero__eyebrow {
@@ -194,7 +194,7 @@
 
 @media (max-width: 380px) {
   .hero__content {
-    padding: calc(76px + env(safe-area-inset-top)) 16px calc(64px + env(safe-area-inset-bottom));
+    padding: calc(160px + env(safe-area-inset-top)) 16px calc(64px + env(safe-area-inset-bottom));
   }
 
   .hero__eyebrow {
