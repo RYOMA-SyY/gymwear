@@ -6,7 +6,6 @@ import { AnimatePresence } from 'motion/react';
 import Nav from './components/Nav';
 import CartDrawer from './components/CartDrawer';
 import Preloader from './components/Preloader';
-import LoaderDebug from './components/LoaderDebug';
 import Home from './pages/Home';
 import Catalog from './pages/Catalog';
 import ProductDetail from './pages/ProductDetail';
@@ -17,13 +16,7 @@ import './styles/global.css';
 
 function App() {
   const [preloaderDone, setPreloaderDone] = useState(false);
-  const [loaderRun, setLoaderRun] = useState(0);
   const openCart = useCartStore((s) => s.openCart);
-
-  const replayLoader = () => {
-    setPreloaderDone(false);
-    setLoaderRun((r) => r + 1);
-  };
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -59,11 +52,8 @@ function App() {
         <CartDrawer />
       </BrowserRouter>
       <AnimatePresence>
-        {!preloaderDone && (
-          <Preloader key={loaderRun} onComplete={() => setPreloaderDone(true)} />
-        )}
+        {!preloaderDone && <Preloader onComplete={() => setPreloaderDone(true)} />}
       </AnimatePresence>
-      {import.meta.env.DEV && <LoaderDebug onReplay={replayLoader} />}
     </I18nProvider>
   );
 }

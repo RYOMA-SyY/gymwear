@@ -17,6 +17,9 @@ dist-ssr
 .env.*
 !.env.example
 
+# Local skill/reference drops — not part of the site
+~/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
