@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useI18n } from '../context/I18nContext';
+import { useCartStore } from '../context/CartContext';
 import './Nav.css';
 
 export default function Nav({ onCartClick }) {
   const { t, locale, changeLocale, SUPPORTED_LOCALES, dir } = useI18n();
+  const cartItems = useCartStore((s) => s.items);
+  const cartCount = cartItems.reduce((n, i) => n + (i.quantity || 0), 0);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
@@ -29,13 +32,21 @@ export default function Nav({ onCartClick }) {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
   const handleLangChange = (newLocale) => {
     changeLocale(newLocale);
     setIsLangOpen(false);
   };
 
   return (
-    <header className={`nav ${isScrolled ? 'is-scrolled' : ''}`} role="banner" dir={dir}>
+    <>
+      <header className={`nav ${isScrolled ? 'is-scrolled' : ''} ${isMobileMenuOpen ? 'menu-open' : ''}`} role="banner" dir={dir}>
       <div className="nav__inner container">
         <Link to="/" className="nav__logo" aria-label="Gymwear Home">
           <svg viewBox="0 0 200 182" fill="none" xmlns="http://www.w3.org/2000/svg" width="52" height="47">
@@ -107,6 +118,20 @@ export default function Nav({ onCartClick }) {
           </button>
 
           <button
+            className="nav__cart-icon"
+            onClick={onCartClick}
+            aria-label={`${t('nav.cart')}${cartCount > 0 ? ` (${cartCount})` : ''}`}
+            data-parallax
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="9" cy="21" r="1" />
+              <circle cx="20" cy="21" r="1" />
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+            </svg>
+            {cartCount > 0 && <span className="nav__cart-count">{cartCount}</span>}
+          </button>
+
+          <button
             className={`nav__burger ${isMobileMenuOpen ? 'is-open' : ''}`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-expanded={isMobileMenuOpen}
@@ -119,6 +144,7 @@ export default function Nav({ onCartClick }) {
           </button>
         </div>
       </div>
+      </header>
 
       <div
         id="mobile-menu"
@@ -184,6 +210,6 @@ export default function Nav({ onCartClick }) {
           </button>
         </nav>
       </div>
-    </header>
+    </>
   );
 }

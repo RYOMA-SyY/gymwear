@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { HERO_IMAGES } from './Hero';
 
-const MIN_DISPLAY = 900;
-const MAX_WAIT = 2600;
+const DURATION = 2000;
 const EXIT_DURATION = 700;
 
 const WEIGHT_FONTS = 30;
@@ -57,26 +56,25 @@ export default function Preloader({ onComplete }) {
     };
 
     const tick = () => {
-      const gap = target - displayed;
+      const elapsed = performance.now() - start;
+      // Wall-clock floor guarantees the full 2s run and keeps the bar
+      // moving; real task progress takes over whenever it runs ahead.
+      const timeTarget = Math.min(100, (elapsed / DURATION) * 100);
+      const effTarget = Math.max(target, timeTarget);
+      const gap = effTarget - displayed;
       if (gap > 0) {
-        displayed = Math.min(target, displayed + Math.max(gap * 0.1, 0.4));
+        displayed = Math.min(effTarget, displayed + Math.max(gap * 0.12, 0.6));
         const shown = Math.floor(displayed);
         if (shown !== lastShown) {
           lastShown = shown;
           setProgress(shown);
         }
       }
-      const elapsed = performance.now() - start;
-      const allDone =
-        state.fonts && state.imagesLoaded >= HERO_IMAGES.length && state.windowLoaded;
-      if ((allDone && elapsed >= MIN_DISPLAY) || elapsed >= MAX_WAIT) {
-        target = 100;
-        if (displayed >= 99.5 || elapsed >= MAX_WAIT) {
-          displayed = 100;
-          setProgress(100);
-          finish();
-          return;
-        }
+      if (elapsed >= DURATION) {
+        displayed = 100;
+        setProgress(100);
+        finish();
+        return;
       }
       raf = requestAnimationFrame(tick);
     };
@@ -121,8 +119,8 @@ export default function Preloader({ onComplete }) {
     }
 
     const safety = setTimeout(() => {
-      target = 100;
-    }, MAX_WAIT);
+      finish();
+    }, DURATION + 500);
 
     return () => {
       cancelAnimationFrame(raf);
