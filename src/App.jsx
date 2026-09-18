@@ -33,10 +33,6 @@ function App() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  if (!preloaderDone) {
-    return <Preloader onComplete={() => setPreloaderDone(true)} />;
-  }
-
   return (
     <I18nProvider>
       <BrowserRouter>
@@ -53,6 +49,7 @@ function App() {
         </main>
         <CartDrawer />
       </BrowserRouter>
+      {!preloaderDone && <Preloader onComplete={() => setPreloaderDone(true)} />}
     </I18nProvider>
   );
 }

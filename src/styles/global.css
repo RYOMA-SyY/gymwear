@@ -39,30 +39,78 @@
   background: var(--black);
   z-index: 10000;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 28px;
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 0.8s var(--ease-out), visibility 0.8s var(--ease-out);
+  transition: transform 0.7s var(--ease-in-out);
+  will-change: transform;
 }
 
-.preloader.hidden {
-  opacity: 0;
-  visibility: hidden;
+.preloader.is-exiting {
+  transform: translateY(-100%);
   pointer-events: none;
 }
 
-.preloader__mark {
-  width: 52px;
-  height: 52px;
+.preloader.is-exiting .preloader__center {
   opacity: 0;
-  animation: fadeIn 0.6s var(--ease-out) forwards;
+  transition: opacity 0.35s var(--ease-out);
+}
+
+.preloader__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+}
+
+.preloader__mark {
+  width: 56px;
+  height: 56px;
+}
+
+.preloader__draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: preloaderDraw 1.1s var(--ease-out) forwards;
+}
+
+.preloader__draw--inner {
+  animation-delay: 0.25s;
+}
+
+@keyframes preloaderDraw {
+  to { stroke-dashoffset: 0; }
+}
+
+.preloader__word {
+  display: flex;
+  overflow: hidden;
+  font-family: var(--f-display);
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.35em;
+  text-indent: 0.35em;
+  color: var(--off-white);
+}
+
+.preloader__letter {
+  display: inline-block;
+  transform: translateY(110%);
+  animation: preloaderRise 0.7s var(--ease-out) forwards;
+}
+
+@keyframes preloaderRise {
+  to { transform: translateY(0); }
+}
+
+.preloader__meta {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .preloader__bar {
-  width: 160px;
+  width: 100%;
   height: 1px;
   background: var(--line);
   overflow: hidden;
@@ -72,15 +120,29 @@
   width: 0%;
   height: 100%;
   background: var(--off-white);
-  animation: fillBar 0.7s var(--ease-out) forwards;
 }
 
-@keyframes fadeIn {
-  to { opacity: 1; }
+.preloader__count {
+  align-self: flex-end;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: var(--grey-dim);
+  font-variant-numeric: tabular-nums;
 }
 
-@keyframes fillBar {
-  to { width: 100%; }
+@media (prefers-reduced-motion: reduce) {
+  .preloader {
+    transition: none;
+  }
+
+  .preloader__draw,
+  .preloader__letter {
+    animation: none;
+    stroke-dashoffset: 0;
+    transform: none;
+  }
 }
 
 [data-reveal] {

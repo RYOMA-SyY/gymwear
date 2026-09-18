@@ -4,10 +4,12 @@ import { useScrollReveal } from '../hooks/useScrollReveal';
 import { useI18n } from '../context/I18nContext';
 import './Hero.css';
 
-const heroImages = [
+export const HERO_IMAGES = [
   'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1920&h=1080&fit=crop',
   'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1920&h=1080&fit=crop',
 ];
+
+const heroImages = HERO_IMAGES;
 
 export default function Hero() {
   const { t } = useI18n();
