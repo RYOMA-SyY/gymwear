@@ -16,7 +16,12 @@ export const loaderDebug = {
   reducedMotion: false,
 };
 
-export const loaderDebugControls = { skip: null, forceMotion: false };
+export const loaderDebugControls = {
+  skip: null,
+  forceMotion:
+    typeof localStorage !== 'undefined' &&
+    localStorage.getItem('gymwear-force-motion') === '1',
+};
 
 const wordContainer = {
   hidden: {},

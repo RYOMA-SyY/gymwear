@@ -55,6 +55,11 @@ export default function LoaderDebug({ onReplay }) {
           checked={forceMotion}
           onChange={(e) => {
             loaderDebugControls.forceMotion = e.target.checked;
+            try {
+              localStorage.setItem('gymwear-force-motion', e.target.checked ? '1' : '0');
+            } catch {
+              // private mode etc. — flag still works for this session
+            }
             setForceMotion(e.target.checked);
             onReplay();
           }}
