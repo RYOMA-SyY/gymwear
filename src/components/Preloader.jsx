@@ -3,6 +3,19 @@ import { useEffect, useRef, useState } from 'react';
 const DURATION = 2000;
 const EXIT_DURATION = 700;
 
+// Mutable debug snapshot (dev only). Read by LoaderDebug via polling so
+// the app tree never re-renders on every progress frame.
+export const loaderDebug = {
+  run: 0,
+  phase: 'idle',
+  progress: 0,
+  elapsed: 0,
+  ticks: 0,
+  reducedMotion: false,
+};
+
+export const loaderDebugControls = { skip: null };
+
 export default function Preloader({ onComplete }) {
   const [progress, setProgress] = useState(0);
   const [phase, setPhase] = useState('loading');
@@ -15,6 +28,13 @@ export default function Preloader({ onComplete }) {
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
+    loaderDebug.run += 1;
+    loaderDebug.phase = 'loading';
+    loaderDebug.progress = 0;
+    loaderDebug.elapsed = 0;
+    loaderDebug.ticks = 0;
+    loaderDebug.reducedMotion = reduced;
+
     let raf = 0;
     let lastShown = -1;
     const start = performance.now();
@@ -24,11 +44,14 @@ export default function Preloader({ onComplete }) {
       finishedRef.current = true;
       cancelAnimationFrame(raf);
       setProgress(100);
+      loaderDebug.progress = 100;
+      loaderDebug.phase = 'done';
       if (reduced) {
         document.body.style.overflow = prevOverflow;
         onCompleteRef.current?.();
       } else {
         setPhase('exiting');
+        loaderDebug.phase = 'exiting';
         setTimeout(() => {
           document.body.style.overflow = prevOverflow;
           onCompleteRef.current?.();
@@ -44,9 +67,14 @@ export default function Preloader({ onComplete }) {
       };
     }
 
+    loaderDebugControls.skip = finish;
+
     const tick = () => {
       const elapsed = performance.now() - start;
+      loaderDebug.ticks += 1;
+      loaderDebug.elapsed = Math.round(elapsed);
       const shown = Math.min(100, Math.floor((elapsed / DURATION) * 100));
+      loaderDebug.progress = shown;
       if (shown !== lastShown) {
         lastShown = shown;
         setProgress(shown);
@@ -65,6 +93,7 @@ export default function Preloader({ onComplete }) {
       cancelAnimationFrame(raf);
       clearTimeout(safety);
       document.body.style.overflow = prevOverflow;
+      loaderDebugControls.skip = null;
     };
   }, []);
 

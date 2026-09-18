@@ -5,6 +5,7 @@ import { useCartStore } from './context/CartContext';
 import Nav from './components/Nav';
 import CartDrawer from './components/CartDrawer';
 import Preloader from './components/Preloader';
+import LoaderDebug from './components/LoaderDebug';
 import Home from './pages/Home';
 import Catalog from './pages/Catalog';
 import ProductDetail from './pages/ProductDetail';
@@ -15,7 +16,13 @@ import './styles/global.css';
 
 function App() {
   const [preloaderDone, setPreloaderDone] = useState(false);
+  const [loaderRun, setLoaderRun] = useState(0);
   const openCart = useCartStore((s) => s.openCart);
+
+  const replayLoader = () => {
+    setPreloaderDone(false);
+    setLoaderRun((r) => r + 1);
+  };
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -50,7 +57,10 @@ function App() {
         </main>
         <CartDrawer />
       </BrowserRouter>
-      {!preloaderDone && <Preloader onComplete={() => setPreloaderDone(true)} />}
+      {!preloaderDone && (
+        <Preloader key={loaderRun} onComplete={() => setPreloaderDone(true)} />
+      )}
+      {import.meta.env.DEV && <LoaderDebug onReplay={replayLoader} />}
     </I18nProvider>
   );
 }
