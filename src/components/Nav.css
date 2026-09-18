@@ -51,6 +51,13 @@
   text-overflow: ellipsis;
 }
 
+.nav__logo-img {
+  display: block;
+  height: 32px;
+  width: auto;
+  filter: invert(1);
+}
+
 .nav__desktop {
   flex: 1;
   display: flex;

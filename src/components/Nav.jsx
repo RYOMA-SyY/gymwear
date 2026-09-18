@@ -49,11 +49,7 @@ export default function Nav({ onCartClick }) {
       <header className={`nav ${isScrolled ? 'is-scrolled' : ''} ${isMobileMenuOpen ? 'menu-open' : ''}`} role="banner" dir={dir}>
       <div className="nav__inner container">
         <Link to="/" className="nav__logo" aria-label="Gymwear Home">
-          <svg viewBox="0 0 200 182" fill="none" xmlns="http://www.w3.org/2000/svg" width="52" height="47">
-            <path d="M100 0L200 91L100 182L0 91L100 0Z" stroke="var(--off-white)" strokeWidth="4" strokeLinejoin="round"/>
-            <path d="M100 40L160 91L100 142L40 91L100 40Z" stroke="var(--off-white)" strokeWidth="2" strokeLinejoin="round" opacity="0.5"/>
-          </svg>
-          <span className="nav__wordmark">GYMWEAR</span>
+          <img src="/logo.jpg" alt="Gymwear" className="nav__logo-img" />
         </Link>
 
         <nav className="nav__desktop" role="navigation" aria-label="Main navigation">

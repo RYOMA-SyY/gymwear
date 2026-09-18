@@ -57,11 +57,7 @@ export default function Footer() {
         <div className="footer__top">
           <div className="footer__brand">
             <Link to="/" className="footer__logo" aria-label="Gymwear Home">
-              <svg viewBox="0 0 200 182" fill="none" xmlns="http://www.w3.org/2000/svg" width="60" height="55">
-                <path d="M100 0L200 91L100 182L0 91L100 0Z" stroke="var(--off-white)" strokeWidth="4" strokeLinejoin="round"/>
-                <path d="M100 40L160 91L100 142L40 91L100 40Z" stroke="var(--off-white)" strokeWidth="2" strokeLinejoin="round" opacity="0.5"/>
-              </svg>
-              <span className="footer__wordmark">GYMWEAR</span>
+              <img src="/logo.jpg" alt="Gymwear" className="footer__logo-img" />
             </Link>
             <p className="footer__tagline">{t('footer.tagline')}</p>
           </div>
