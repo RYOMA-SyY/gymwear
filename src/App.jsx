@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { I18nProvider } from './context/I18nContext';
+import { useCartStore } from './context/CartContext';
 import Nav from './components/Nav';
 import CartDrawer from './components/CartDrawer';
 import Preloader from './components/Preloader';
@@ -14,7 +15,7 @@ import './styles/global.css';
 
 function App() {
   const [preloaderDone, setPreloaderDone] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false);
+  const openCart = useCartStore((s) => s.openCart);
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -36,7 +37,7 @@ function App() {
   return (
     <I18nProvider>
       <BrowserRouter>
-        <Nav onCartClick={() => setCartOpen(true)} />
+        <Nav onCartClick={openCart} />
         <main id="main-content">
           <Routes>
             <Route path="/" element={<Home />} />

@@ -23,7 +23,7 @@ export default function Preloader({ onComplete }) {
     const start = performance.now();
     const state = {
       fonts: false,
-      imagesLoaded: 0,
+      images: HERO_IMAGES.map(() => 0),
       windowLoaded: document.readyState === 'complete',
     };
     let target = state.windowLoaded ? WEIGHT_WINDOW : 0;
@@ -32,9 +32,11 @@ export default function Preloader({ onComplete }) {
     let raf = 0;
 
     const recompute = () => {
+      const imageFrac =
+        state.images.reduce((sum, f) => sum + f, 0) / HERO_IMAGES.length;
       target =
         (state.fonts ? WEIGHT_FONTS : 0) +
-        (state.imagesLoaded / HERO_IMAGES.length) * WEIGHT_IMAGES +
+        imageFrac * WEIGHT_IMAGES +
         (state.windowLoaded ? WEIGHT_WINDOW : 0);
     };
 
@@ -99,15 +101,38 @@ export default function Preloader({ onComplete }) {
       recompute();
     }
 
-    HERO_IMAGES.forEach((src) => {
-      const img = new Image();
-      const settle = () => {
-        state.imagesLoaded += 1;
+    // Real byte-level progress: stream each hero image and report
+    // received bytes against content-length. Warms the HTTP cache too,
+    // so the hero <img> tags resolve instantly afterwards.
+    const fetchWithProgress = async (url, index) => {
+      try {
+        const res = await fetch(url, { mode: 'cors' });
+        const total = Number(res.headers.get('content-length')) || 0;
+        if (!res.body) {
+          await res.blob();
+          state.images[index] = 1;
+          recompute();
+          return;
+        }
+        const reader = res.body.getReader();
+        let loaded = 0;
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          loaded += value.byteLength;
+          state.images[index] = total > 0 ? Math.min(1, loaded / total) : 0.5;
+          recompute();
+        }
+        state.images[index] = 1;
         recompute();
-      };
-      img.onload = settle;
-      img.onerror = settle;
-      img.src = src;
+      } catch {
+        state.images[index] = 1;
+        recompute();
+      }
+    };
+
+    HERO_IMAGES.forEach((src, i) => {
+      fetchWithProgress(src, i);
     });
 
     const onLoad = () => {
