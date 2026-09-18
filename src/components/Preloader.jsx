@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
 
 const DURATION = 2000;
-const EXIT_DURATION = 700;
+const EASE_OUT = [0.22, 1, 0.36, 1];
+const EASE_IN_OUT = [0.65, 0, 0.35, 1];
 
 // Mutable debug snapshot (dev only). Read by LoaderDebug via polling so
 // the app tree never re-renders on every progress frame.
@@ -16,17 +18,26 @@ export const loaderDebug = {
 
 export const loaderDebugControls = { skip: null, forceMotion: false };
 
+const wordContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.05, delayChildren: 0.25 } },
+};
+
+const wordLetter = {
+  hidden: { y: '110%' },
+  show: { y: '0%', transition: { duration: 0.7, ease: EASE_OUT } },
+};
+
 export default function Preloader({ onComplete }) {
   const [progress, setProgress] = useState(0);
-  const [phase, setPhase] = useState('loading');
   const finishedRef = useRef(false);
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
 
+  const osReducedMotion = useReducedMotion();
+  const reduced = osReducedMotion && !loaderDebugControls.forceMotion;
+
   useEffect(() => {
-    const reduced =
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
-      !loaderDebugControls.forceMotion;
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
@@ -47,29 +58,21 @@ export default function Preloader({ onComplete }) {
       cancelAnimationFrame(raf);
       setProgress(100);
       loaderDebug.progress = 100;
-      loaderDebug.phase = 'done';
-      if (reduced) {
-        document.body.style.overflow = prevOverflow;
-        onCompleteRef.current?.();
-      } else {
-        setPhase('exiting');
-        loaderDebug.phase = 'exiting';
-        setTimeout(() => {
-          document.body.style.overflow = prevOverflow;
-          onCompleteRef.current?.();
-        }, EXIT_DURATION);
-      }
+      loaderDebug.phase = 'exiting';
+      document.body.style.overflow = prevOverflow;
+      onCompleteRef.current?.();
     };
+
+    loaderDebugControls.skip = finish;
 
     if (reduced) {
       const t = setTimeout(finish, 150);
       return () => {
         clearTimeout(t);
         document.body.style.overflow = prevOverflow;
+        loaderDebugControls.skip = null;
       };
     }
-
-    loaderDebugControls.skip = finish;
 
     const tick = () => {
       const elapsed = performance.now() - start;
@@ -97,49 +100,64 @@ export default function Preloader({ onComplete }) {
       document.body.style.overflow = prevOverflow;
       loaderDebugControls.skip = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const shown = Math.min(100, Math.floor(progress));
 
   return (
-    <div
-      className={`preloader ${phase === 'exiting' ? 'is-exiting' : ''}`}
-      aria-hidden={phase !== 'loading'}
+    <motion.div
+      className="preloader"
+      aria-hidden="true"
+      initial={reduced ? false : { opacity: 1 }}
+      exit={{ y: '-100%', transition: { duration: 0.7, ease: EASE_IN_OUT } }}
     >
       <div className="preloader__center">
-        <svg
+        <motion.svg
           className="preloader__mark"
           viewBox="0 0 200 182"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           aria-hidden="true"
+          initial={reduced ? false : { opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, ease: EASE_OUT }}
         >
           <path
-            className="preloader__draw preloader__draw--outer"
             d="M100 0L200 91L100 182L0 91L100 0Z"
             stroke="var(--off-white)"
             strokeWidth="4"
             strokeLinejoin="round"
-            pathLength="1"
           />
           <path
-            className="preloader__draw preloader__draw--inner"
             d="M100 40L160 91L100 142L40 91L100 40Z"
             stroke="var(--off-white)"
             strokeWidth="2"
             strokeLinejoin="round"
             opacity="0.5"
-            pathLength="1"
           />
-        </svg>
-        <p className="preloader__word" aria-hidden="true">
+        </motion.svg>
+
+        <motion.p
+          className="preloader__word"
+          aria-hidden="true"
+          variants={wordContainer}
+          initial={reduced ? false : 'hidden'}
+          animate="show"
+        >
           {'GYMWEAR'.split('').map((ch, i) => (
-            <span key={i} className="preloader__letter" style={{ animationDelay: `${0.15 + i * 0.05}s` }}>
+            <motion.span key={i} className="preloader__letter" variants={wordLetter}>
               {ch}
-            </span>
+            </motion.span>
           ))}
-        </p>
-        <div className="preloader__meta">
+        </motion.p>
+
+        <motion.div
+          className="preloader__meta"
+          initial={reduced ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.3 }}
+        >
           <div
             className="preloader__bar"
             role="progressbar"
@@ -148,13 +166,13 @@ export default function Preloader({ onComplete }) {
             aria-valuemax={100}
             aria-valuenow={shown}
           >
-            <div className="preloader__bar-fill" style={{ width: `${shown}%` }} />
+            <div className="preloader__bar-fill" style={{ transform: `scaleX(${shown / 100})` }} />
           </div>
           <span className="preloader__count" aria-hidden="true">
             {String(shown).padStart(3, '0')}
           </span>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }

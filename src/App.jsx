@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { I18nProvider } from './context/I18nContext';
 import { useCartStore } from './context/CartContext';
+import { AnimatePresence } from 'motion/react';
 import Nav from './components/Nav';
 import CartDrawer from './components/CartDrawer';
 import Preloader from './components/Preloader';
@@ -57,9 +58,11 @@ function App() {
         </main>
         <CartDrawer />
       </BrowserRouter>
-      {!preloaderDone && (
-        <Preloader key={loaderRun} onComplete={() => setPreloaderDone(true)} />
-      )}
+      <AnimatePresence>
+        {!preloaderDone && (
+          <Preloader key={loaderRun} onComplete={() => setPreloaderDone(true)} />
+        )}
+      </AnimatePresence>
       {import.meta.env.DEV && <LoaderDebug onReplay={replayLoader} />}
     </I18nProvider>
   );
