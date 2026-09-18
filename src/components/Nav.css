@@ -34,26 +34,10 @@
   text-decoration: none;
 }
 
-.nav__logo svg {
-  flex-shrink: 0;
-  width: 40px;
-  height: auto;
-}
-
-.nav__wordmark {
-  font-family: var(--f-display);
-  font-size: clamp(16px, 2.4vw, 24px);
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  color: var(--off-white);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .nav__logo-img {
   display: block;
-  height: 32px;
+  flex-shrink: 0;
+  height: 48px;
   width: auto;
   filter: invert(1);
 }
@@ -426,12 +410,8 @@
 }
 
 @media (max-width: 380px) {
-  .nav__wordmark {
-    display: none;
-  }
-
-  .nav__logo svg {
-    width: 34px;
+  .nav__logo-img {
+    height: 40px;
   }
 
   .nav__inner {

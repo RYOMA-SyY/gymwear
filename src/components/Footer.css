@@ -25,17 +25,9 @@
   text-decoration: none;
 }
 
-.footer__wordmark {
-  font-family: var(--f-display);
-  font-size: clamp(24px, 3.2vw, 32px);
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  color: var(--off-white);
-}
-
 .footer__logo-img {
   display: block;
-  height: 44px;
+  height: 64px;
   width: auto;
   filter: invert(1);
 }

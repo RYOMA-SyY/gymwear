@@ -6,16 +6,6 @@ const EXIT_DURATION = 700;
 const EASE_OUT = [0.22, 1, 0.36, 1];
 const EASE_IN_OUT = [0.65, 0, 0.35, 1];
 
-const wordContainer = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.05, delayChildren: 0.25 } },
-};
-
-const wordLetter = {
-  hidden: { y: '110%' },
-  show: { y: '0%', transition: { duration: 0.7, ease: EASE_OUT } },
-};
-
 export default function Preloader({ onComplete }) {
   const [progress, setProgress] = useState(0);
   const finishedRef = useRef(false);
@@ -74,44 +64,14 @@ export default function Preloader({ onComplete }) {
       exit={{ y: '-100%', transition: { duration: 0.7, ease: EASE_IN_OUT } }}
     >
       <div className="preloader__center">
-        <motion.svg
-          className="preloader__mark"
-          viewBox="0 0 200 182"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
+        <motion.img
+          src="/logo.jpg"
+          alt="Gymwear"
+          className="preloader__logo"
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: EASE_OUT }}
-        >
-          <path
-            d="M100 0L200 91L100 182L0 91L100 0Z"
-            stroke="var(--off-white)"
-            strokeWidth="4"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M100 40L160 91L100 142L40 91L100 40Z"
-            stroke="var(--off-white)"
-            strokeWidth="2"
-            strokeLinejoin="round"
-            opacity="0.5"
-          />
-        </motion.svg>
-
-        <motion.p
-          className="preloader__word"
-          aria-hidden="true"
-          variants={wordContainer}
-          initial="hidden"
-          animate="show"
-        >
-          {'GYMWEAR'.split('').map((ch, i) => (
-            <motion.span key={i} className="preloader__letter" variants={wordLetter}>
-              {ch}
-            </motion.span>
-          ))}
-        </motion.p>
+        />
 
         <motion.div
           className="preloader__meta"

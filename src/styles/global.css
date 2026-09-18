@@ -51,25 +51,10 @@
   gap: 26px;
 }
 
-.preloader__mark {
-  width: 56px;
-  height: 56px;
-}
-
-.preloader__word {
-  display: flex;
-  overflow: hidden;
-  font-family: var(--f-display);
-  font-size: 15px;
-  font-weight: 400;
-  letter-spacing: 0.35em;
-  text-indent: 0.35em;
-  color: var(--off-white);
-}
-
-.preloader__letter {
-  display: inline-block;
-  will-change: transform;
+.preloader__logo {
+  width: 160px;
+  height: auto;
+  filter: invert(1);
 }
 
 .preloader__meta {
