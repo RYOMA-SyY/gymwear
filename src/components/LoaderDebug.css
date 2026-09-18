@@ -56,6 +56,21 @@
   color: var(--off-white);
 }
 
+.loader-debug__force {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 10px 0;
+  color: var(--grey);
+  cursor: pointer;
+}
+
+.loader-debug__force input {
+  accent-color: var(--off-white);
+  width: 14px;
+  height: 14px;
+}
+
 .loader-debug__actions {
   display: flex;
   gap: 8px;

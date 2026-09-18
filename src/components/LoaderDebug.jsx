@@ -5,6 +5,7 @@ import './LoaderDebug.css';
 export default function LoaderDebug({ onReplay }) {
   const [snap, setSnap] = useState({ ...loaderDebug });
   const [open, setOpen] = useState(true);
+  const [forceMotion, setForceMotion] = useState(loaderDebugControls.forceMotion);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -48,6 +49,18 @@ export default function LoaderDebug({ onReplay }) {
           </div>
         ))}
       </dl>
+      <label className="loader-debug__force">
+        <input
+          type="checkbox"
+          checked={forceMotion}
+          onChange={(e) => {
+            loaderDebugControls.forceMotion = e.target.checked;
+            setForceMotion(e.target.checked);
+            onReplay();
+          }}
+        />
+        force motion (ignore OS setting)
+      </label>
       <div className="loader-debug__actions">
         <button onClick={onReplay}>↻ replay</button>
         <button

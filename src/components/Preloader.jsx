@@ -14,7 +14,7 @@ export const loaderDebug = {
   reducedMotion: false,
 };
 
-export const loaderDebugControls = { skip: null };
+export const loaderDebugControls = { skip: null, forceMotion: false };
 
 export default function Preloader({ onComplete }) {
   const [progress, setProgress] = useState(0);
@@ -24,7 +24,9 @@ export default function Preloader({ onComplete }) {
   onCompleteRef.current = onComplete;
 
   useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduced =
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+      !loaderDebugControls.forceMotion;
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
